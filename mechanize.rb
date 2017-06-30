@@ -10,26 +10,33 @@ agent = Mechanize.new { |agent|
 }
 
 # This is where we setup page
-page = agent.get('https://www.wikipedia.org//')
-search_form = page.form(:action => '//www.wikipedia.org/search-redirect.php')
+page = agent.get('https://twitter.com/')
+# Below is where we need to inpect the page, find the search form, and grab the action
+search_form = page.form(:action => '/search')
 
-search_terms.each do |term|
-	search_form.search = term
-	results = agent.submit(search_form, search_form.button('go'))
-	html_results = Nokogiri::HTML(results.body)
+# HELP!!! There is no name or value to the submit button.
+search_form.search = 'Steve Jobs'
 
-	name = html_results.at_css('#firstHeading').text
-	bday = html_results.at_css('.bday').text
-	dday = html_results.at_css('.dday').text
+# toggle btw pp below and everything below that to see if we get anything
+pp search_form 
 
-	# puts name + ' was born on ' + bday + ' and died on ' + dday + '.'
+# search_terms.each do |term|
+# 	search_form.search = term
+# 	results = agent.submit(search_form, search_form.button('go'))
+# 	html_results = Nokogiri::HTML(results.body)
 
-	CSV.open('life-data.csv', 'a+') do |csv|
-		csv << [name, bday, dday]
-	end
+# 	name = html_results.at_css('#firstHeading').text
+# 	bday = html_results.at_css('.bday').text
+# 	dday = html_results.at_css('.dday').text
 
-	delay_time = rand(11)
-	sleep(delay_time)
-	puts name + ' was just added to the CSV.'
+# 	# puts name + ' was born on ' + bday + ' and died on ' + dday + '.'
 
-end
+# 	CSV.open('life-data.csv', 'a+') do |csv|
+# 		csv << [name, bday, dday]
+# 	end
+
+# 	delay_time = rand(11)
+# 	sleep(delay_time)
+# 	puts name + ' was just added to the CSV.'
+
+# end
